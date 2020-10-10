@@ -5,31 +5,27 @@ import random
 class BaseStrategy:
     def __init__(self, envelopes):
         self.envelopes = envelopes
-    def play(self):
-        """
-        play the game: take an envelope and ask the player to take it or open another one
-        when he take it, print the amount of money.
-        :return none:
-        """
-        max_money = 0
-        for place in self.envelopes:
-            stop_or_open = input("inside this envelope there is"+self.envelopes[place].money + "$. \n do you want to open another envelope or stop? (write open/stop to continue." )
-            while stop_or_open not in ("stop", "open"):
-                stop_or_open = input("type open or stop")
-            if stop_or_open == "stop":
-                max_money = self.envelopes[place].money
-                print("you got: " + str(max_money) + " dollars")
-                return
-            if stop_or_open == "open":
-                print("next envelope is opening now")
 
-        print("you got: " + str(max_money) + " dollars")
-    
+    def play(self):
+        max_money = 0
+        place = self.envelopes[0]
+        for place in self.envelopes:
+            if not place.used:
+                stop_or_open = input("inside this envelope there are " + str(place.money) +
+                                     "$. \nDo you want to open another envelope or stop? (write open/stop to continue).")
+                while stop_or_open not in ("stop", "open"):
+                    stop_or_open = input("type open or stop")
+                if stop_or_open == "stop":
+                    max_money = place.money
+                    print(place.display())
+                    return
+                if stop_or_open == "open":
+                    place.used = True
+                    print("next envelope is opening now")
+
+        print(place.display())
+
     def display(self):
-        """
-        display what this strategy is doing
-        :return description:
-        """
         return "take an envelope from the list, print the amount of money and ask if you want to take it. \n " \
                "it will continue taking envelopes until you choose to take it, or until there are no more envelopes."
 
@@ -46,6 +42,10 @@ class Automatic_BaseStrategy(BaseStrategy):
         """
         num = random.randrange(100)
         envelope = self.envelopes[num]
+        while envelope.used:
+            num = random.randrange(100)
+            envelope = self.envelopes[num]
+        envelope.used = True
         print(envelope.display())
 
     def display(self):
@@ -90,11 +90,12 @@ class N_max_strategy(BaseStrategy):
         return "N max strategy - find N max envelopes, and when it found N maxes it stops \n " \
                "and print how much money was in the last envelope and that's how much you've got."
 
+
 class More_then_N_percent_group_strategy(BaseStrategy):
     def __init__(self, envelopes, percent):
         super().__init__(envelopes)
         self.envelopes = envelopes
-        self.percent = percent
+        self.percent = float(int(percent))
 
     def play(self):
         """
@@ -108,13 +109,13 @@ class More_then_N_percent_group_strategy(BaseStrategy):
         highest_amount = self.envelopes[opened_env].money
         opened_env = 1
         absolute_highest_amount = 0
-        env_to_return = None
-        while (self.percent * 100) > opened_env:
+        env_to_return = self.envelopes[opened_env]
+        while (float(self.percent) * 100) > float(opened_env):
             if self.envelopes[opened_env].money > highest_amount:
                 highest_amount = self.envelopes[opened_env].money
                 env_to_return = self.envelopes[opened_env]
-                self.envelopes[opened_env - 1].used = True
-                opened_env = opened_env + 1
+            self.envelopes[opened_env - 1].used = True
+            opened_env = opened_env + 1
         absolute_highest_amount = highest_amount
         while opened_env < 100:
             if self.envelopes[opened_env].money > absolute_highest_amount:
@@ -123,7 +124,7 @@ class More_then_N_percent_group_strategy(BaseStrategy):
                 break
             self.envelopes[opened_env].used = True
             opened_env = opened_env + 1
-        print(env_to_return.displey())
+        print("you got: " + str(env_to_return.money) + " dollars")
 
     def display(self):
         """

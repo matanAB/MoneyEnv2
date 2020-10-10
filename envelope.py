@@ -7,4 +7,4 @@ class Envelope:
         self.used = False
 
     def display(self):
-        return str(self.money) + "dollars"
+        return "you got: " + str(self.money) + " dollars"
