@@ -1,4 +1,3 @@
-from envelope import Envelope
 import random
 
 
@@ -12,16 +11,14 @@ class BaseStrategy:
         when he take it, print the amount of money.
         :return none:
         """
-        max_money = 0
         place = self.envelopes[0]
         for place in self.envelopes:
             if not place.used:
                 stop_or_open = input("inside this envelope there are " + str(place.money) +
-                                     "$. \nDo you want to open another envelope or stop? (write open/stop to continue).")
+                                     "$.\nDo you want to open another envelope or stop? (write open/stop to continue).")
                 while stop_or_open not in ("stop", "open"):
                     stop_or_open = input("type open or stop")
                 if stop_or_open == "stop":
-                    max_money = place.money
                     print(place.display())
                     return
                 if stop_or_open == "open":
@@ -62,7 +59,7 @@ class Automatic_BaseStrategy(BaseStrategy):
         display what this strategy is doing
         :return description:
         """
-        return "Automatic BaseStrategey - take random envelope from the list of envelopes \n " \
+        return "Automatic BaseStrategy - take random envelope from the list of envelopes \n " \
                "and print how much money was in the envelope and that's how much you've got."
 
 
@@ -140,7 +137,7 @@ class More_then_N_percent_group_strategy(BaseStrategy):
         display what this strategy is doing
         :return description:
         """
-        return (" opens x% of envelopes and chooses the envelope \n "
+        return ("opens x% of envelopes and chooses the envelope \n "
                 "with the highest amount of money inside. then it \n "
                 "compares the amount of money to the other 100% - x% \n "
                 "of the envelopes and if a higher amount is found \n"
