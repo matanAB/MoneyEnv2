@@ -7,6 +7,11 @@ class BaseStrategy:
         self.envelopes = envelopes
 
     def play(self):
+        """
+        play the game: take an envelope and ask the player to take it or open another one
+        when he take it, print the amount of money.
+        :return none:
+        """
         max_money = 0
         place = self.envelopes[0]
         for place in self.envelopes:
@@ -26,6 +31,10 @@ class BaseStrategy:
         print(place.display())
 
     def display(self):
+        """
+        display what this strategy is doing
+        :return description:
+        """
         return "take an envelope from the list, print the amount of money and ask if you want to take it. \n " \
                "it will continue taking envelopes until you choose to take it, or until there are no more envelopes."
 
