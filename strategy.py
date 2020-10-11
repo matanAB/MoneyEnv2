@@ -86,6 +86,10 @@ class N_max_strategy(BaseStrategy):
                 max_env = self.envelopes[index]
             self.envelopes[index].used = True
             index += 1
+        if count != self.N:
+            # if we didn't found N maxes- meaning the while stopped because we got to the last envelope
+            # the "max_env" should be the last one
+            max_env = self.envelopes[99]
         print(max_env.display())
 
     def display(self):
@@ -130,6 +134,9 @@ class More_then_N_percent_group_strategy(BaseStrategy):
                 break
             self.envelopes[opened_env].used = True
             opened_env = opened_env + 1
+        if opened_env == 100:
+            # if the while ended and we didn't found our max envelope the "env_to_return" should be the last one
+            env_to_return = self.envelopes[99]
         print("you got: " + str(env_to_return.money) + " dollars")
 
     def display(self):
